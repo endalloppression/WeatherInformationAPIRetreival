@@ -20,11 +20,11 @@ namespace WeatherInformationAPIRetreival
     public class Audit
     {
         public DateTime timestamp_utc { get; set; }
-        public int snow { get; set; }
+        public double snow { get; set; }
         public double temp { get; set; }
         public DateTime timestamp_local { get; set; }
-        public int ts { get; set; }
-        public int precip { get; set; }
+        public double ts { get; set; }
+        public double precip { get; set; }
     }
 
 
