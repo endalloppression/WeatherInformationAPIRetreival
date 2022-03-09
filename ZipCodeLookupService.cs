@@ -3,25 +3,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WeatherInformationAPIRetreival
 {
-    public class ZipCodeLookupService
+    public static class ZipCodeLookupService
     {
 
-        public bool IsZipGood(List<ZipCode> zipCodes)
+        public static List<string> IsZipGood(string input)
         {
-            //use lookup service here...consider making this static as that's how it'll be used!
-            var client = new SimpleZipCode.Repos.ZipCodeRepo(zipCodes);
-            foreach (var zipCode in zipCodes)
+            var zipCodesTemp = input.Split(' '); ;//separates out all of the input elements
+            var zipCodes = zipCodesTemp.ToList();
+            string zipCodeValidationPattern = @"^\d{5}(?:[-\s]\d{4})?$";//US zip code validation pattern
+            foreach (var element in from element in zipCodesTemp
+                                    where !Regex.IsMatch(element, zipCodeValidationPattern)
+                                    select element)
             {
-                if (client.RadiusSearch(zipCode, 1).Any())
-                {
-                    return true;
-                }
+                zipCodes.Remove(element);
+                //throw new Exception("Invalid Zip Code!");//This is what the ask was but it could be improved here, so i made it function
+                Console.WriteLine(element + " is invalid zip input. Removing the invalid input from the list...");
             }
-            return false;
+
+            return zipCodes;
         }
     }
 }
